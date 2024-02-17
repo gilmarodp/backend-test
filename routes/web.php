@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-//Route::get('r/{redirect}', [RedirectController::class, 'redirect'])->name('r.redirect');
+Route::get('r/{redirect}', [RedirectController::class, 'redirect'])->name('r.redirect');
 
 Route::resource('redirects', RedirectController::class)->except('show');

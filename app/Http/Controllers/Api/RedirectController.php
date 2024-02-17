@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\RedirectLogResource;
 use App\Http\Resources\RedirectResource;
 use App\Models\Redirect;
-use Illuminate\Http\Request;
 
 class RedirectController extends Controller
 {
@@ -21,48 +21,8 @@ class RedirectController extends Controller
         return response()->json(RedirectResource::collection($redirects));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function logs(Redirect $redirect)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Redirect  $redirect
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Redirect $redirect)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Redirect  $redirect
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Redirect $redirect)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Redirect  $redirect
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Redirect $redirect)
-    {
-        //
+        return response()->json(RedirectLogResource::collection($redirect->logs));
     }
 }

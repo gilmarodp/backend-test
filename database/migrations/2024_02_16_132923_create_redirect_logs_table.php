@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('redirect_id')->constrained('redirects');
             $table->ipAddress();
             $table->string('user_agent');
-            $table->string('header_refer');
+            $table->string('header_refer')->nullable();
             $table->json('query_params');
             $table->timestamp('accessed_at');
         });

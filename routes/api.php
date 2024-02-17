@@ -20,3 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('redirects', [RedirectController::class, 'index']);
+Route::get('redirects/{redirect}/logs', [RedirectController::class, 'logs'])->name('api.redirects.logs');

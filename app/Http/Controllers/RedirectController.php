@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RedirectRequest;
 use App\Models\Redirect;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class RedirectController extends Controller
@@ -106,5 +107,32 @@ class RedirectController extends Controller
         return redirect()
             ->route('redirects.index')
             ->withMessage('Redirect excluído com sucesso!');
+    }
+
+    public function redirect(Request $request, Redirect $redirect)
+    {
+        $parseUrl = parse_url($redirect->url_redirect);
+        $queryParamsRequest = collect($request->all())->filter(fn($value) => !is_null($value) && $value !== "");
+        $urlRedirect = $parseUrl['scheme'] . '://' . $parseUrl['host'] . $parseUrl['path'];
+        parse_str($parseUrl['query'], $queryParamsRedirect);
+
+        $queryParamsRedirect = collect($queryParamsRedirect)->filter(fn($value) => !is_null($value) && $value !== "");
+
+        $queryParams = $queryParamsRedirect->merge($queryParamsRequest);
+        $queryParams = $queryParams->filter(function ($value) {
+            return !is_null($value) && $value !== "";
+        });
+
+        $redirect->logs()->create([
+            'ip_address' => $request->ip(),
+            'user_agent' => $request->userAgent(),
+            'header_refer' => $request->headers->get('referer'),
+            'query_params' => $queryParams->toJson(),
+            'accessed_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        $queryParams = $queryParams->count() ? '?' . http_build_query($queryParams->toArray()) : '';
+
+        return redirect()->to($urlRedirect . $queryParams);
     }
 }
