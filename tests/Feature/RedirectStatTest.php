@@ -13,7 +13,7 @@ class RedirectStatTest extends TestCase
     /** @test */
     public function count_unique_ip_address_to_many_requests_only_one_ip_address()
     {
-        $redirect = Redirect::factory()->create();
+        $redirect = Redirect::factory()->create(['status' => 1]);
 
         RedirectLog::factory()->count(rand(10, 99))->create([
             'redirect_id' => $redirect->id,
@@ -28,7 +28,7 @@ class RedirectStatTest extends TestCase
     /** @test */
     public function count_headers_refer()
     {
-        $redirect = Redirect::factory()->create();
+        $redirect = Redirect::factory()->create(['status' => 1]);
 
         RedirectLog::factory()->count(2)->create([
             'redirect_id' => $redirect->id,
@@ -69,7 +69,7 @@ class RedirectStatTest extends TestCase
     /** @test */
     public function count_until_ten_days_ago()
     {
-        $redirect = Redirect::factory()->create();
+        $redirect = Redirect::factory()->create(['status' => 1]);
 
         RedirectLog::factory()->count(10)->create([
             'redirect_id' => $redirect->id,
@@ -95,7 +95,7 @@ class RedirectStatTest extends TestCase
     /** @test */
     public function count_until_ten_days_ago_without_access()
     {
-        $redirect = Redirect::factory()->create();
+        $redirect = Redirect::factory()->create(['status' => 1]);
 
         $response = $this->get(route('api.redirects.stats', $redirect->code));
 
@@ -110,7 +110,7 @@ class RedirectStatTest extends TestCase
     /** @test */
     public function count_only_until_ten_days_ago()
     {
-        $redirect = Redirect::factory()->create();
+        $redirect = Redirect::factory()->create(['status' => 1]);
 
         RedirectLog::factory()->count(10)->create([
             'redirect_id' => $redirect->id,
