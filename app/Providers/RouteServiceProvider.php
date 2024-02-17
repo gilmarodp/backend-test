@@ -43,8 +43,6 @@ class RouteServiceProvider extends ServiceProvider
                 abort(404);
             }
 
-//            dd($request->methods, in_array('PUT', $request->methods));
-
             $isEdit = str_contains($request->uri, 'edit') || in_array('PUT', $request->methods);
 
             return Redirect::query()
