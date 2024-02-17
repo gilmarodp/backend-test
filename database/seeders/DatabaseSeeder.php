@@ -14,6 +14,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-         \App\Models\RedirectLog::factory(10)->create();
+         \App\Models\RedirectLog::factory(100)->create();
     }
 }
