@@ -23,7 +23,7 @@ class RedirectController extends Controller
 
     public function logs(Redirect $redirect)
     {
-        return response()->json(RedirectLogResource::collection($redirect->logs));
+        return response()->json(RedirectLogResource::collection($redirect->logs->sortByDesc('accessed_at')));
     }
 
     public function stats(Redirect $redirect)

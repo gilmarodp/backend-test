@@ -41,17 +41,19 @@
                 <td>
                     <form action="{{ route('redirects.destroy', $redirect->code) }}" method="POST">
 
-                        <a class="btn btn-info" href="{{ route('r.redirect', $redirect->code) }}" target="_blank">Abrir</a>
-
                         <a class="btn btn-primary" href="{{ route('redirects.edit', $redirect->code) }}">Editar</a>
 
-                        @csrf
-                        @method('DELETE')
+                        @if($redirect->status)
+                            <a class="btn btn-info" href="{{ route('r.redirect', $redirect->code) }}" target="_blank">Abrir</a>
 
-                        <button type="submit" class="btn btn-danger">Excluir</button>
+                            @csrf
+                            @method('DELETE')
 
-                        <a class="btn btn-info" href="{{ route('api.redirects.logs', $redirect->code) }}">Logs</a>
-                        <a class="btn btn-info" href="{{ route('api.redirects.stats', $redirect->code) }}">Stats</a>
+                            <button type="submit" class="btn btn-danger">Excluir</button>
+
+                            <a class="btn btn-info" href="{{ route('api.redirects.logs', $redirect->code) }}">Logs</a>
+                            <a class="btn btn-info" href="{{ route('api.redirects.stats', $redirect->code) }}">Stats</a>
+                        @endif
                     </form>
                 </td>
             </tr>

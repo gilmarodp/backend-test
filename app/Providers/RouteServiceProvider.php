@@ -36,14 +36,21 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Route::bind('redirect', function ($value) {
+        Route::bind('redirect', function ($value, $request) {
             $id = (new \Hashids\Hashids)->decode($value);
 
             if (!isset($id[0])) {
                 abort(404);
             }
 
-            return Redirect::query()->findOrFail($id[0]);
+//            dd($request->methods, in_array('PUT', $request->methods));
+
+            $isEdit = str_contains($request->uri, 'edit') || in_array('PUT', $request->methods);
+
+            return Redirect::query()
+                ->when(!$isEdit, fn($q) => $q->where('status', 1))
+                ->where('id', $id[0])
+                ->firstOrFail();
         });
 
         $this->configureRateLimiting();
