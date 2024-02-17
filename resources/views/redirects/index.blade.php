@@ -28,7 +28,7 @@
             <th>Último acesso</th>
             <th>Data de criação</th>
             <th>Data de atualização</th>
-            <th width="350px">Ações</th>
+            <th width="400px">Ações</th>
         </tr>
         @foreach ($redirects as $redirect)
             <tr>
@@ -51,6 +51,7 @@
                         <button type="submit" class="btn btn-danger">Excluir</button>
 
                         <a class="btn btn-info" href="{{ route('api.redirects.logs', $redirect->code) }}">Logs</a>
+                        <a class="btn btn-info" href="{{ route('api.redirects.stats', $redirect->code) }}">Stats</a>
                     </form>
                 </td>
             </tr>
