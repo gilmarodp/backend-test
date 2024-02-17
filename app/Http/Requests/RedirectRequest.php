@@ -16,6 +16,28 @@ class RedirectRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        $parseUrl = parse_url($this->get('url_redirect'));
+
+        if (isset($parseUrl['query']) && !is_null($parseUrl['query'])) {
+            parse_str($parseUrl['query'], $queryParams);
+
+            $params = [];
+
+            foreach ($queryParams as $key => $value) {
+                $params[] = [
+                    'key' => $key,
+                    'value' => $value,
+                ];
+            }
+        } else {
+            $params = null;
+        }
+
+        $this->merge(['query_params' => $params]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -28,7 +50,17 @@ class RedirectRequest extends FormRequest
                 'required',
                 'url',
                 'starts_with:https',
-                'not_in:' . config('app.url')
+                'doesnt_start_with:' . config('app.url')
+            ],
+            'query_params' => [
+                'nullable',
+                'array',
+            ],
+            'query_params.*.key' => [
+                'required',
+            ],
+            'query_params.*.value' => [
+                'required',
             ],
             'status' => [
                 $this->method() === 'PUT' ? 'required' : 'nullable',
@@ -43,7 +75,11 @@ class RedirectRequest extends FormRequest
             'url_redirect.required' => 'URL de destino é obrigatório.',
             'url_redirect.url' => 'URL de destino inválida.',
             'url_redirect.starts_with' => 'URL de destino deve começar com "https".',
-            'url_redirect.not_in' => 'URL de destino não pode apontar para a própria aplicação.',
+            'url_redirect.doesnt_start_with' => 'URL de destino não pode apontar para a própria aplicação.',
+
+            'query_params.array' => 'Os parametros da URL são inválidos.',
+            'query_params.*.key.required' => 'As chaves dos parametros da URL são não pode ser vazio.',
+            'query_params.*.value.required' => 'Os valores dos parametros da URL são não pode ser vazio.',
 
             'status.required' => 'Status é obrigatório.',
             'status.in' => 'Status inválido.',
