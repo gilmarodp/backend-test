@@ -21,11 +21,14 @@ class RedirectRequest extends FormRequest
         $parseUrl = parse_url($this->get('url_redirect'));
 
         if (isset($parseUrl['query']) && !is_null($parseUrl['query'])) {
-            parse_str($parseUrl['query'], $queryParams);
-
             $params = [];
 
-            foreach ($queryParams as $key => $value) {
+            foreach (explode('&', $parseUrl['query']) as $param) {
+                $param = explode('=', $param);
+
+                $key = $param[0] ?? null;
+                $value = $param[1] ?? null;
+
                 $params[] = [
                     'key' => $key,
                     'value' => $value,
@@ -60,7 +63,7 @@ class RedirectRequest extends FormRequest
                 'required',
             ],
             'query_params.*.value' => [
-                'required',
+                'nullable',
             ],
             'status' => [
                 $this->method() === 'PUT' ? 'required' : 'nullable',
@@ -79,7 +82,6 @@ class RedirectRequest extends FormRequest
 
             'query_params.array' => 'Os parametros da URL são inválidos.',
             'query_params.*.key.required' => 'As chaves dos parametros da URL são não pode ser vazio.',
-            'query_params.*.value.required' => 'Os valores dos parametros da URL são não pode ser vazio.',
 
             'status.required' => 'Status é obrigatório.',
             'status.in' => 'Status inválido.',

@@ -73,10 +73,10 @@ class RedirectTest extends TestCase
     {
         $response = $this->post(route('redirects.store'), [
             '_token' => csrf_token(),
-            'url_redirect' => fake()->imageUrl() . '&test=jhhdhsdhj&testabc=',
+            'url_redirect' => 'https://google.com?test=jhhdhsdhj&=1122',
         ]);
 
         $response->assertStatus(302)
-            ->assertSessionHasErrorsIn('Os valores dos parametros da URL são não pode ser vazio.');
+            ->assertSessionHasErrors(['query_params.1.key' => 'As chaves dos parametros da URL são não pode ser vazio.']);
     }
 }
