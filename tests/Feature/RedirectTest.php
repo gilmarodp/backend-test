@@ -8,6 +8,18 @@ use Tests\TestCase;
 class RedirectTest extends TestCase
 {
     /** @test */
+    public function create_redirect_with_invalid_dns_url()
+    {
+        $response = $this->post(route('redirects.store'), [
+            '_token' => csrf_token(),
+            'url_redirect' => 'https://' . Str::random(64) . '.com?test=jhhdhsdhj',
+        ]);
+
+        $response->assertStatus(302)
+            ->assertSessionHasErrors(['url_redirect' => 'A URL possui um DNS inválido.']);
+    }
+
+    /** @test */
     public function create_redirect_with_valid_url()
     {
         $response = $this->post(route('redirects.store'), [

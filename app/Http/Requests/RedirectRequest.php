@@ -16,7 +16,7 @@ class RedirectRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation()
+    protected function prepareForValidation(): void
     {
         $parseUrl = parse_url($this->get('url_redirect'));
 

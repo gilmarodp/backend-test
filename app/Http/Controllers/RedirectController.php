@@ -42,7 +42,17 @@ class RedirectController extends Controller
      */
     public function store(RedirectRequest $request)
     {
-        $urlExists = Http::get($request->url_redirect)->ok();
+        $parseUrl = parse_url($request->get('url_redirect'));
+
+        if (!checkdnsrr($parseUrl['host'], 'A') && !checkdnsrr($parseUrl['host'], 'AAAA')) {
+            return redirect()
+                ->route('redirects.create')
+                ->withErrors([
+                    'url_redirect' => 'A URL possui um DNS inválido.',
+                ]);
+        }
+
+        $urlExists = Http::get($request->get('url_redirect'))->ok();
 
         if (!$urlExists) {
             return redirect()
